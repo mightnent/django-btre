@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404,render
 from django.core.paginator import EmptyPage,PageNotAnInteger,Paginator
+from .choices import price_choices,state_choices,bedroom_choices
 from .models import Single_Listing
 
 # Create your views here.
@@ -9,7 +10,7 @@ def index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'Listings' : page_obj
+        'Listings' : page_obj,
     }
     return render(request,'listings/listings.html',context)
 
@@ -18,9 +19,14 @@ def single_listing(request,listing_id):
     listing = get_object_or_404(Single_Listing,pk=listing_id)
    
     context = {
-        'listing':listing
+        'listing':listing,
     }
     return render(request,'listings/single_listing.html',context)
 
 def search(request):
-    return render(request,'listings/search.html')
+    context = {
+        'price_choices':price_choices,
+        'state_choices':state_choices,
+        'bedroom_choices':bedroom_choices
+    }
+    return render(request,'listings/search.html',context)
