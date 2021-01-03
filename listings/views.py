@@ -24,9 +24,36 @@ def single_listing(request,listing_id):
     return render(request,'listings/single_listing.html',context)
 
 def search(request):
+    queryset_list = Single_Listing.objects.order_by('-list_date')
+    if 'keywords' in request.GET:
+        keywords = request.GET['keywords']
+        #check if empty string
+        if keywords:
+            queryset_list = queryset_list.filter(description__icontains=keywords)
+    
+    if 'state' in request.GET:
+        state = request.GET['state']
+        #check if empty string
+        if state:
+            queryset_list = queryset_list.filter(state__iexact=state)
+
+    if 'bedrooms' in request.GET:
+        bedrooms = request.GET['bedrooms']
+        #check if empty string
+        if bedrooms:
+            queryset_list = queryset_list.filter(bedrooms__lte=bedrooms)
+    
+    if 'price' in request.GET:
+        price = request.GET['price']
+        #check if empty string
+        if price:
+            queryset_list = queryset_list.filter(price__lte=price)
+    
     context = {
         'price_choices':price_choices,
         'state_choices':state_choices,
-        'bedroom_choices':bedroom_choices
+        'bedroom_choices':bedroom_choices,
+        'Listings' : queryset_list,
+        'values': request.GET
     }
     return render(request,'listings/search.html',context)
