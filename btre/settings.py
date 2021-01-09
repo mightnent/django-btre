@@ -151,6 +151,7 @@ EMAIL_HOST_PASSWORD = 'yyy'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+#.local_setting is actually for production. It is call local by convention
 try:
     from .local_settings import *
 except ImportError:
